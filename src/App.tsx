@@ -5,6 +5,7 @@ import CorporationContainer from "./components/CorporationContainer";
 import ModalDelete from "./components/ModalDelete";
 import Backdrop from "./components/BackDrop";
 import ModalEdit from "./components/ModalEdit";
+import ModalEditComplex from "./components/ModalEditComplex";
 
 const containers = [1, 2, 3, 4];
 const modalDeleteState = true;
@@ -41,7 +42,7 @@ function App() {
       {modalEditState && (
         <div>
           <Backdrop />
-          <ModalEdit />
+          <ModalEditComplex />
         </div>
       )}
     </div>
