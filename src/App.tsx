@@ -32,18 +32,18 @@ function App() {
           </div>
         </div>
       </div>
-      {modalDeleteState && (
+      {/* {modalDeleteState && (
         <div>
           <Backdrop />
           <ModalDelete />
         </div>
-      )}
-      {/* {modalEditState && (
+      )} */}
+      {modalEditState && (
         <div>
           <Backdrop />
           <ModalEdit />
         </div>
-      )} */}
+      )}
     </div>
   );
 }

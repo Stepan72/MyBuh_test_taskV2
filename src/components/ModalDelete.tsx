@@ -4,7 +4,7 @@ import cancelIcon from "./../assets/CancelIcon.svg";
 function ModalDelete() {
   return (
     <div className="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] z-20">
-      <div className="flex w-[550px] px-[48px] pt-[32px] pb-[40px] flex-col items-center gap-[16px] rounded-md bg-[#FFF] relative ">
+      <div className="flex w-[550px] px-[48px] pt-[32px] pb-[40px] flex-col items-center gap-[16px] rounded-md bg-[#FFF] ">
         <div className="flex flex-col justify-center items-start gap-[28px] self-stretch ">
           <div className="text-center self-stretch">
             <p className="text-[#262626]  text-[18px] font-semibold">
@@ -26,14 +26,14 @@ function ModalDelete() {
             </button>
           </div>
         </div>
-        <button>
-          <img
-            src={cancelIcon}
-            className="w-[16px] h-[16px] absolute right-[16px] top-[16px]"
-            alt="cancelCrest"
-          />
-        </button>
       </div>
+      <button>
+        <img
+          src={cancelIcon}
+          className="w-[16px] h-[16px] absolute right-[16px] top-[16px]"
+          alt="cancelCrest"
+        />
+      </button>
     </div>
   );
 }
