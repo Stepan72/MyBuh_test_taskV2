@@ -14,7 +14,7 @@ function CorporationContainer({
   onEdit,
 }: ICompany) {
   return (
-    <div className="px-[32px] py-[24px] flex items-center gap-5 self-stretch rounded-md bg-[#FFF] shadow-[0_0px_12px_2px_rgba(0,0,0,0.1)]">
+    <div className="px-[32px] py-[24px] flex items-center gap-5 self-stretch rounded-md bg-[#FFF] shadow-[0_0px_12px_2px_rgba(0,0,0,0.1)] hover:border-[#208AD9] border-[1px]">
       <div className="flex items-center gap-7 flex-[1_1_0%]">
         <CorporationLogoContainer logo={logo} />
         <div className="flex flex-col justify-center items-start gap-3 flex-[1_1_0%]">
