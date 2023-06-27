@@ -122,7 +122,7 @@ function ComplexForm() {
             </p>
             <div className="flex h-[39px] px-[16px] justify-between items-center  self-stretch rounded-[5px] border-[1px] border-[#D1D1D1]">
               <select
-                className="text-[14px] text-[#262626] self-stretch"
+                className="text-[14px] text-[#262626] w-full"
                 value={ownId}
                 onChange={selectionHandler}
               >

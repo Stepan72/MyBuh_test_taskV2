@@ -38,7 +38,7 @@ function SimpleForm(props: { ownId: number }) {
               type="text"
               value={inn}
               onChange={changeInnHandler}
-              className="text-[14px] text-[#262626]"
+              className="text-[14px] text-[#262626] "
             />
           </div>
         </div>
