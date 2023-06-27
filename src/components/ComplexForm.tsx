@@ -5,7 +5,13 @@ import { useCompanyContextHook } from "../context/companyContext";
 
 function ComplexForm() {
   const ctx = useCompanyContextHook();
-  const [ownId, setOwnId] = useState<number>(ctx!.elToEdit!.ownership_id);
+  /// если тип не относится к прочим, чтобы по дефолту ставил АО в начале при нажатии на кнопку!
+  const defaultStateOWn =
+    ctx!.elToEdit!.ownership_id === 1 || ctx!.elToEdit!.ownership_id === 14
+      ? 6
+      : ctx!.elToEdit!.ownership_id;
+  //// Стейты Радио и типа
+  const [ownId, setOwnId] = useState<number>(defaultStateOWn);
   const [activeRadioOption, setActiveRadioOption] = useState<number>(
     ctx!.elToEdit!.ownership_id
   );
@@ -48,7 +54,7 @@ function ComplexForm() {
           <input
             type="radio"
             name="others"
-            value={0}
+            value={activeRadioOption}
             checked={activeRadioOption !== 15 && activeRadioOption !== 20}
             onChange={() => {
               setActiveRadioOption(0);
