@@ -4,8 +4,8 @@ export interface ICompany {
   company_tin: string;
   logo: string | null;
   ownership_id: number;
-  onDelete: (delEl: number) => void;
-  onEdit: (editEl: number) => void;
+  onDelete: (delEl: number | undefined) => void;
+  onEdit: (editEl: number | undefined) => void;
 }
 
 export interface IOwnership {
@@ -21,4 +21,11 @@ export interface ICompanyFull extends ICompany, IOwnership {}
 
 export interface IEdit {
   onCancel: () => void;
+}
+
+export interface IChangeEl {
+  name: string;
+  inn: string;
+  ownId: number;
+  id: number;
 }

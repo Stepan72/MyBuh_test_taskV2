@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import "./App.css";
 import CorporationContainer from "./components/CorporationContainer";
 import ModalDelete from "./components/ModalDelete";
 import Backdrop from "./components/BackDrop";
 import ModalEdit from "./components/ModalEdit";
-import { ICompany, ICompanyFull, IOwnership } from "./types/types";
+import { ICompany } from "./types/types";
 
 import { useCompanyContextHook } from "./context/companyContext";
 
 function App() {
   const ctx = useCompanyContextHook();
-
-  /// Cтейты модалок
-  const [modalDeleteState, setModalDeleteState] = useState<boolean>(false);
-  const [modalEditState, setModalEditState] = useState<boolean>(false);
 
   //// Получение данных по компаниям
   useEffect(() => {
@@ -24,40 +20,41 @@ function App() {
       );
       let dataCompanies = await responseCompanies.json();
       // console.log(dataCompanies);
-      ctx?.setCompanies(dataCompanies);
+      ctx!.setCompanies(dataCompanies);
 
       let responseOwnership = await fetch(
         "https://raw.githubusercontent.com/arkdich/mybuh-frontend-test/main/ownerships.json"
       );
       let dataOwnership = await responseOwnership.json();
       // console.log(dataOwnership);
-      ctx?.setOwnerships(dataOwnership);
+      ctx!.setOwnerships(dataOwnership);
     }
 
     fetchData();
   }, []);
   //// Хендлер редактирования
-  function editIconHandler(editElNum: number) {
+  function editIconHandler(editElNum: number | undefined) {
     let companyElIndex = ctx!.companies?.findIndex((el) => {
       return el.company_id === editElNum;
     });
     let companyToEdit = ctx!.companies![companyElIndex!];
 
-    setModalEditState(true);
-    ctx?.setElToEdit(companyToEdit);
+    ctx!.setModalEditState(true);
+    ctx!.setElToEdit(companyToEdit);
   }
 
   ///// Хендлеры удаления или отмены удаления
-  function deleteIconHandler(delEl: number) {
-    setModalDeleteState(true);
-    ctx?.setElToDel(delEl);
-    console.log(delEl);
+  function deleteIconHandler(delEl: number | undefined) {
+    ctx!.setModalDeleteState(true);
+    ctx!.setElToDel(delEl);
+    // console.log(delEl);
   }
   function deleteStateCancel() {
-    setModalDeleteState(false);
-    ctx?.setElToDel(undefined);
-    setModalEditState(false);
-    ctx?.setElToEdit(undefined);
+    ctx!.setModalDeleteState(false);
+    ctx!.setElToDel(undefined);
+
+    ctx!.setModalEditState(false);
+    ctx!.setElToEdit(undefined);
   }
   function deleteStateConfirm() {
     ctx!.setCompanies((prevValue) => {
@@ -65,8 +62,9 @@ function App() {
         return el.company_id !== ctx?.elToDel;
       });
     });
-    setModalDeleteState(false);
-    ctx?.setElToDel(undefined);
+    ctx!.setModalDeleteState(false);
+
+    ctx!.setElToDel(undefined);
   }
 
   return (
@@ -79,32 +77,42 @@ function App() {
         </div>
         <div className="w-full flex items-start  gap-7 self-stretch	">
           <div className="flex flex-col items-start gap-5 flex-[1_1_0%]">
-            {ctx?.companies?.slice(0, 4).map((el: ICompany) => {
-              return (
-                <CorporationContainer
-                  key={el.company_id}
-                  {...el}
-                  onDelete={deleteIconHandler}
-                  onEdit={editIconHandler}
-                />
-              );
-            })}
+            {ctx?.companies
+              ?.sort((a, b) => {
+                return a.company_id - b.company_id;
+              })
+              .slice(0, 4)
+              .map((el: ICompany) => {
+                return (
+                  <CorporationContainer
+                    key={el.company_id}
+                    {...el}
+                    onDelete={deleteIconHandler}
+                    onEdit={editIconHandler}
+                  />
+                );
+              })}
           </div>
           <div className="flex flex-col items-start gap-5 flex-[1_1_0%]">
-            {ctx?.companies?.slice(4).map((el) => {
-              return (
-                <CorporationContainer
-                  key={el.company_id}
-                  {...el}
-                  onDelete={deleteIconHandler}
-                  onEdit={editIconHandler}
-                />
-              );
-            })}
+            {ctx?.companies
+              ?.sort((a, b) => {
+                return a.company_id - b.company_id;
+              })
+              .slice(4)
+              .map((el) => {
+                return (
+                  <CorporationContainer
+                    key={el.company_id}
+                    {...el}
+                    onDelete={deleteIconHandler}
+                    onEdit={editIconHandler}
+                  />
+                );
+              })}
           </div>
         </div>
       </div>
-      {modalDeleteState && (
+      {ctx!.modalDeleteState && (
         <div>
           <Backdrop onCancel={deleteStateCancel} />
           <ModalDelete
@@ -113,7 +121,7 @@ function App() {
           />
         </div>
       )}
-      {modalEditState && (
+      {ctx!.modalEditState && (
         <div>
           <Backdrop onCancel={deleteStateCancel} />
           <ModalEdit onCancel={deleteStateCancel} />

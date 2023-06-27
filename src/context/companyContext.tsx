@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { ICompany, IOwnership } from "../types/types";
+import { IChangeEl, ICompany, IOwnership } from "../types/types";
 
 interface IContext {
   companies: ICompany[] | undefined;
@@ -10,6 +10,11 @@ interface IContext {
   setElToDel: React.Dispatch<React.SetStateAction<number | undefined>>;
   elToEdit: ICompany | undefined;
   setElToEdit: React.Dispatch<React.SetStateAction<ICompany | undefined>>;
+  changeElement: (changedData: IChangeEl) => void;
+  modalDeleteState: boolean;
+  setModalDeleteState: React.Dispatch<React.SetStateAction<boolean>>;
+  modalEditState: boolean;
+  setModalEditState: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const CompanyContext = React.createContext<IContext | null>({
@@ -21,6 +26,11 @@ export const CompanyContext = React.createContext<IContext | null>({
   setElToDel: () => {},
   elToEdit: undefined,
   setElToEdit: () => {},
+  changeElement: () => {},
+  modalDeleteState: false,
+  modalEditState: false,
+  setModalDeleteState: () => {},
+  setModalEditState: () => {},
 });
 
 export const useCompanyContextHook = () => useContext(CompanyContext);

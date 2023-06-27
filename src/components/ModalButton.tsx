@@ -2,8 +2,8 @@ import React from "react";
 interface IntButton {
   activeStyleState: boolean;
   text: string;
-  //   onClick: (ownId: number) => void;
-  //   value: number | number[];
+  onClick: (ownId: number) => void;
+  value: number;
 }
 
 const activeStyle = {
@@ -15,9 +15,12 @@ const defaultStyle = {
   textColor: "#262626",
 };
 
-function ModalButton({ activeStyleState, text }: IntButton) {
+function ModalButton({ activeStyleState, text, onClick, value }: IntButton) {
   return (
     <button
+      onClick={() => {
+        onClick(value);
+      }}
       className={`rounded-[5px] flex px-[63px] py-[12px] justify-center items-center gap-[10px] flex-[1_1_0%] `}
       style={{
         backgroundColor: activeStyleState

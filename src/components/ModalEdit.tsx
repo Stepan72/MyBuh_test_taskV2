@@ -8,7 +8,7 @@ import ComplexForm from "./ComplexForm";
 
 function ModalEdit({ onCancel }: IEdit) {
   const ctx = useCompanyContextHook();
-  const [ownId, setOwnId] = useState(ctx?.elToEdit?.ownership_id);
+  const [ownId, setOwnId] = useState(ctx!.elToEdit!.ownership_id); /// должен быть тут полюбому
 
   function changeOwnIdHandler(id: number) {
     setOwnId(id);
@@ -24,32 +24,24 @@ function ModalEdit({ onCancel }: IEdit) {
           <ModalButton
             activeStyleState={ownId === 1}
             text="TOO"
-            // value={1}
-            // onClick={changeOwnIdHandler}
+            value={1}
+            onClick={changeOwnIdHandler}
           />
           <ModalButton
             activeStyleState={ownId === 14}
             text="ИП"
-            // value={14}
-            // onClick={changeOwnIdHandler}
+            value={14}
+            onClick={changeOwnIdHandler}
           />
           <ModalButton
             activeStyleState={ownId !== 1 && ownId !== 14}
-            // onClick={changeOwnIdHandler}
-            // value={[3, 5]}
+            onClick={changeOwnIdHandler}
+            value={0}
             text="Прочие"
           />
         </div>
-        {(ctx?.elToEdit?.ownership_id === 1 ||
-          ctx?.elToEdit?.ownership_id === 14) && <SimpleForm />}
-        {ctx?.elToEdit?.ownership_id !== 1 &&
-          ctx?.elToEdit?.ownership_id !== 14 && <ComplexForm />}
-
-        <div className="flex flex-col items-start gap-[10px] ">
-          <button className="flex justify-center items-center px-[48px] py-[12px] gap-[10px] rounded-[4px] bg-[#009A3E] text-[#FFFFFF]">
-            Сохранить
-          </button>
-        </div>
+        {(ownId === 1 || ownId === 14) && <SimpleForm ownId={ownId} />}
+        {ownId !== 1 && ownId !== 14 && <ComplexForm />}
       </div>
       <button
         onClick={() => {
