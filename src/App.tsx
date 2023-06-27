@@ -57,13 +57,12 @@ function App() {
     ctx!.setElToEdit(undefined);
   }
   function deleteStateConfirm() {
-    ctx!.setCompanies((prevValue) => {
-      return prevValue!.filter((el) => {
-        return el.company_id !== ctx?.elToDel;
-      });
+    const companiesWithDeletedEl = ctx?.companies?.filter((el) => {
+      return el.company_id !== ctx.elToDel;
     });
+    console.log(companiesWithDeletedEl);
+    ctx!.setCompanies(companiesWithDeletedEl);
     ctx!.setModalDeleteState(false);
-
     ctx!.setElToDel(undefined);
   }
 
