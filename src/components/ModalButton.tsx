@@ -2,6 +2,8 @@ import React from "react";
 interface IntButton {
   activeStyleState: boolean;
   text: string;
+  //   onClick: (ownId: number) => void;
+  //   value: number | number[];
 }
 
 const activeStyle = {

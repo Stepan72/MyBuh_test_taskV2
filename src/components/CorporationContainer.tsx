@@ -11,6 +11,7 @@ function CorporationContainer({
   logo,
   ownership_id,
   onDelete,
+  onEdit,
 }: ICompany) {
   return (
     <div className="px-[32px] py-[24px] flex items-center gap-5 self-stretch rounded-md bg-[#FFF] shadow-[0_0px_12px_2px_rgba(0,0,0,0.1)]">
@@ -24,7 +25,11 @@ function CorporationContainer({
           </div>
         </div>
       </div>
-      <button>
+      <button
+        onClick={() => {
+          onEdit(company_id);
+        }}
+      >
         <img src={editLogo} className="w-6 h-6" alt="edit-icon" />
       </button>
       <button

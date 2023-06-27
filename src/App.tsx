@@ -5,46 +5,68 @@ import CorporationContainer from "./components/CorporationContainer";
 import ModalDelete from "./components/ModalDelete";
 import Backdrop from "./components/BackDrop";
 import ModalEdit from "./components/ModalEdit";
-import ModalEditComplex from "./components/ModalEditComplex";
-import { ICompany } from "./types/types";
-const containers = [1, 2, 3, 4];
-const modalEditState = true;
+import { ICompany, ICompanyFull, IOwnership } from "./types/types";
+
+import { useCompanyContextHook } from "./context/companyContext";
 
 function App() {
-  const [companies, setCompanies] = useState<ICompany[] | null>(null);
-  const [modalDeleteState, setModalDeleteState] = useState<{
-    state: true | false;
-    stateElToDel?: number;
-  }>({ state: false });
+  const ctx = useCompanyContextHook();
+
+  /// Cтейты модалок
+  const [modalDeleteState, setModalDeleteState] = useState<boolean>(false);
+  const [modalEditState, setModalEditState] = useState<boolean>(false);
 
   //// Получение данных по компаниям
   useEffect(() => {
     async function fetchData() {
-      let response = await fetch(
+      let responseCompanies = await fetch(
         "https://raw.githubusercontent.com/arkdich/mybuh-frontend-test/main/companies.json"
       );
-      let data = await response.json();
-      console.log(data);
-      setCompanies(data);
+      let dataCompanies = await responseCompanies.json();
+      // console.log(dataCompanies);
+      ctx?.setCompanies(dataCompanies);
+
+      let responseOwnership = await fetch(
+        "https://raw.githubusercontent.com/arkdich/mybuh-frontend-test/main/ownerships.json"
+      );
+      let dataOwnership = await responseOwnership.json();
+      // console.log(dataOwnership);
+      ctx?.setOwnerships(dataOwnership);
     }
 
     fetchData();
   }, []);
+  //// Хендлер редактирования
+  function editIconHandler(editElNum: number) {
+    let companyElIndex = ctx!.companies?.findIndex((el) => {
+      return el.company_id === editElNum;
+    });
+    let companyToEdit = ctx!.companies![companyElIndex!];
+
+    setModalEditState(true);
+    ctx?.setElToEdit(companyToEdit);
+  }
 
   ///// Хендлеры удаления или отмены удаления
   function deleteIconHandler(delEl: number) {
-    setModalDeleteState({ state: true, stateElToDel: delEl });
+    setModalDeleteState(true);
+    ctx?.setElToDel(delEl);
+    console.log(delEl);
   }
   function deleteStateCancel() {
-    setModalDeleteState({ state: false, stateElToDel: undefined });
+    setModalDeleteState(false);
+    ctx?.setElToDel(undefined);
+    setModalEditState(false);
+    ctx?.setElToEdit(undefined);
   }
   function deleteStateConfirm() {
-    setCompanies((prevValue) => {
+    ctx!.setCompanies((prevValue) => {
       return prevValue!.filter((el) => {
-        return el.company_id !== modalDeleteState.stateElToDel;
+        return el.company_id !== ctx?.elToDel;
       });
     });
-    setModalDeleteState({ state: false, stateElToDel: undefined });
+    setModalDeleteState(false);
+    ctx?.setElToDel(undefined);
   }
 
   return (
@@ -57,30 +79,32 @@ function App() {
         </div>
         <div className="w-full flex items-start  gap-7 self-stretch	">
           <div className="flex flex-col items-start gap-5 flex-[1_1_0%]">
-            {companies?.slice(0, 4).map((el: ICompany) => {
+            {ctx?.companies?.slice(0, 4).map((el: ICompany) => {
               return (
                 <CorporationContainer
                   key={el.company_id}
                   {...el}
                   onDelete={deleteIconHandler}
+                  onEdit={editIconHandler}
                 />
               );
             })}
           </div>
           <div className="flex flex-col items-start gap-5 flex-[1_1_0%]">
-            {companies?.slice(4).map((el) => {
+            {ctx?.companies?.slice(4).map((el) => {
               return (
                 <CorporationContainer
                   key={el.company_id}
                   {...el}
                   onDelete={deleteIconHandler}
+                  onEdit={editIconHandler}
                 />
               );
             })}
           </div>
         </div>
       </div>
-      {modalDeleteState.state && (
+      {modalDeleteState && (
         <div>
           <Backdrop onCancel={deleteStateCancel} />
           <ModalDelete
@@ -89,12 +113,12 @@ function App() {
           />
         </div>
       )}
-      {/* {modalEditState && (
+      {modalEditState && (
         <div>
-          <Backdrop />
-          <ModalEditComplex />
+          <Backdrop onCancel={deleteStateCancel} />
+          <ModalEdit onCancel={deleteStateCancel} />
         </div>
-      )} */}
+      )}
     </div>
   );
 }
